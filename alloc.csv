@@ -5,3 +5,11 @@ q3_k_s+en_aware,867,tr,0.347831,0.007633,71.373
 q3_k_s+en_aware,867,en,0.141129,0.003861,82.039
 q3_k_s+tr_aware,867,tr,0.333632,0.006952,72.000
 q3_k_s+tr_aware,867,en,0.141146,0.003845,82.431
+q3_k_s+tr_excess_aware,867,tr,0.356832,0.006668,70.373
+q3_k_s+tr_excess_aware,867,en,0.149815,0.003451,80.529
+q3_k_s+en_aware+imatrix_en,867,tr,0.312622,0.006993,72.647
+q3_k_s+en_aware+imatrix_en,867,en,0.114397,0.003154,83.490
+q3_k_s+tr_aware+imatrix_tr,867,tr,0.272713,0.005956,74.020
+q3_k_s+tr_aware+imatrix_tr,867,en,0.121764,0.003028,82.569
+q3_k_s+tr_excess_aware+imatrix_tr,867,tr,0.274366,0.005607,73.294
+q3_k_s+tr_excess_aware+imatrix_tr,867,en,0.123712,0.002808,81.275
