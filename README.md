@@ -10,22 +10,32 @@ Süre RX 7700 XT'de yaklaşık 1–2 saat. Diskte yaklaşık 10 GB boş yer gere
 
 ## 1. Kurulum (Linux)
 
+En kolay yol llama.cpp'nin hazır Vulkan ikililerini kullanmak; derleme gerekmez:
+
 ```bash
-sudo apt install build-essential cmake git python3-pip libvulkan-dev glslc mesa-vulkan-drivers vulkan-tools
+sudo apt install python3-pip libvulkan1 mesa-vulkan-drivers vulkan-tools unzip curl
 vulkaninfo --summary          # RX 7700 XT listede görünmeli
 
-git clone https://github.com/ggml-org/llama.cpp ~/llama.cpp
-cd ~/llama.cpp
-cmake -B build -DGGML_VULKAN=ON
-cmake --build build --config Release -j
-export BIN=~/llama.cpp/build/bin
+mkdir -p ~/llama.cpp && cd ~/llama.cpp
+curl -sL $(curl -s https://api.github.com/repos/ggml-org/llama.cpp/releases/latest \
+  | grep -o 'https://[^"]*bin-ubuntu-vulkan-x64.zip' | head -1) -o llama.zip
+unzip -q llama.zip
+export BIN=$(dirname $(find ~/llama.cpp -name llama-quantize -type f | head -1))
+echo $BIN                     # bir klasör yolu yazmalı
 
 pip install datasets gguf huggingface_hub
 ```
 
-Derleme sorun çıkarırsa iki seçenek var:
-- llama.cpp GitHub sürümlerinden `llama-…-bin-ubuntu-vulkan-x64.zip` indirilir ve `BIN` açılan klasöre ayarlanır.
-- Ekran kartı olmadan çalıştırılır: `NGL=0 ./pilot.sh`. Bu yol daha yavaştır.
+Kaynaktan derlemek istersen Ubuntu 24.04 veya üstü gerekir, çünkü eski sürümlerde `glslc` paketi yok:
+
+```bash
+sudo apt install build-essential cmake git libvulkan-dev glslc
+git clone https://github.com/ggml-org/llama.cpp ~/llama.cpp-src && cd ~/llama.cpp-src
+cmake -B build -DGGML_VULKAN=ON && cmake --build build --config Release -j
+export BIN=~/llama.cpp-src/build/bin
+```
+
+Ekran kartı çalışmazsa pilot yalnız işlemciyle de çalışır: `NGL=0 ./pilot.sh`. Bu yol daha yavaştır.
 
 ## 2. Model
 
