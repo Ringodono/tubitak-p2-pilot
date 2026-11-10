@@ -1,5 +1,25 @@
 # P2 pilotu: Türkçe ve İngilizce kuantizasyon hassasiyeti
 
+## Pilot 3 (tek komut, 3–4 saat)
+
+Pilot 2'de en güçlü yöntem adayı çıktı: Türkçe nöronları (FFN'nin %0,4'ü) asıl hassasiyetinde tutmak Türkçe KLD'yi %10 düşürüyor. Pilot 3 bunu gerçek bir yönteme çevirir. Tüm model kuantize edilir, seçilen nöronlar ayrı bir F16 (ya da Q8_0) tabloda tutulur ve ek boyut hesaplanır. Karşılaştırılan rakipler:
+
+- rastgele nöronlar,
+- standart aktivasyon ağırlıklı hata seçimi (dil bilgisi kullanmaz),
+- aynı seçimin Türkçe istatistiklerle yapılanı,
+- aynı ek boyutu katman yükseltmeye harcamak.
+
+Bunlar hem İngilizce hem Türkçe imatrix ile, Q3_K_S ve Q2_K'da ölçülür. 3B modelde çekirdek kollar tekrarlanır.
+
+Pilot 2 bittikten sonra, aynı ortamda (`.venv`):
+
+```bash
+git pull
+./run_pilot3.sh
+```
+
+Sonuç `results/pilot3_report.md` dosyasına yazılır; onu yüklemen yeterli. Hata olursa `logs/p3-*.log` dosyasını gönder.
+
 ## Pilot 2 (tek komut, 5–7 saat)
 
 Pilot 2, Türkçenin neden daha kırılgan olduğunu (mekanizma) ve bundan türeyen yöntemleri sınar. Üç modelde çalışır: Qwen2.5-1.5B, EuroLLM-1.7B ve Qwen2.5-3B. Fince kontrol dili olarak eklenir. Yaklaşık 35 GB boş disk gerekir.

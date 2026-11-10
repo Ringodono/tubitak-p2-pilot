@@ -17,6 +17,8 @@
 #     qerror   kuantizasyon hatasının nöronlara dağılımı (M1, M2)
 #     repair   yalnız TR nöronlarını onarma, rastgele kontrolle (M1 nedensel) ve token türü (M3)
 #     fisher   dile özgü Fisher kestirimi, profille karşılaştırma için (Y2)
+#     outlier  Pilot 3: Türkçe nöronları yüksek hassasiyette ayırma, eşit boyutlu rakiplerle (Y1')
+#              OUTLIER_SCOPE=full (Q3_K_S/Q2_K × imatrix en/tr + katman yükseltme) ya da core
 #   report   v1 raporu ($RES/pilot_results.md)
 # Ortam değişkenleri:
 #   MODEL   F16 GGUF (bölünmüş dosyada ilk parça)  (varsayılan: models/qwen2.5-1.5b-instruct-fp16.gguf)
@@ -244,6 +246,35 @@ stage_boost() {
       build_eval "$lft+imatrix_$base+boost_${set}_x${gamma}_s$seed" "$out" "$ft" --imatrix "$im"
     done
   done
+}
+
+stage_outlier() {
+  need_hf
+  [ -f "$RES/neurons.npz" ] || die "Önce neurons aşaması"
+  stage_keep >/dev/null
+  local k="$WORK/keep" lang specs=() up pat n t
+  specs+=("q3_k_s_en=$k/q3_k_s_en.gguf@${OUTLIER_SCOPE:-full}" "q3_k_s_tr=$k/q3_k_s_tr.gguf@${OUTLIER_SCOPE:-full}")
+  if [ "${OUTLIER_SCOPE:-full}" = full ]; then
+    for lang in en tr; do
+      [ -f "$k/q2_k_$lang.gguf" ] || "$QUANT" --imatrix "$(imatrix "$lang")" "$MODEL" "$k/q2_k_$lang.gguf" Q2_K >"$WORK/q.log" 2>&1 \
+        || { tail -20 "$WORK/q.log" >&2; die "llama-quantize hata verdi"; }
+      specs+=("q2_k_$lang=$k/q2_k_$lang.gguf@core")
+    done
+    # Eşit boyutlu rakip: Türkçede en hassas FFN katman(lar)ını yükseltmek (profile.csv)
+    for up in q4_K:1 q5_K:1 q5_K:2; do
+      IFS=: read -r t n <<<"$up"
+      for lang in en tr; do
+        local f="$k/q3_k_s_${lang}+up_${t}_top$n.gguf" args=()
+        if [ ! -f "$f" ]; then
+          while read -r pat; do args+=(--tensor-type "$pat=$t"); done < <("$PY" pilot_analyze.py select tr "$n" | grep ffn)
+          "$QUANT" --imatrix "$(imatrix "$lang")" "${args[@]}" "$MODEL" "$f" Q3_K_S >"$WORK/q.log" 2>&1 \
+            || { tail -20 "$WORK/q.log" >&2; die "llama-quantize hata verdi"; }
+        fi
+        specs+=("q3_k_s_${lang}+up_${t}_top$n=$f@none")
+      done
+    done
+  fi
+  "$PY" analysis/keep.py --hf "$HF" --gguf "$MODEL" --langs "${OUTLIER_LANGS:-tr,en}" --chunks "$TORCH_CHUNKS" "${specs[@]}"
 }
 
 stage_report() { "$PY" pilot_analyze.py report; }
