@@ -41,6 +41,19 @@ download() {
   done
 }
 
+# llama.cpp ikilileri: BIN verilmediyse PATH'e, sonra ev dizinindeki llama.cpp klasörlerine bak
+if [ -z "$BIN" ] && ! command -v llama-quantize >/dev/null; then
+  found="$(find ~/llama.cpp ~/llama.cpp-src -name llama-quantize -type f 2>/dev/null | head -1)"
+  [ -n "$found" ] && BIN="$(dirname "$found")"
+fi
+if [ -n "$BIN" ]; then [ -x "$BIN/llama-quantize" ] || BIN=""; fi
+[ -n "$BIN" ] || command -v llama-quantize >/dev/null || {
+  echo "llama-quantize bulunamadı. llama.cpp'nin açıldığı klasörü ver: BIN=/klasör/yolu ./run_all.sh"
+  exit 1
+}
+export BIN
+echo "llama.cpp: ${BIN:-PATH}"
+
 # Gerekli Python paketleri: eksikse hemen dur (her model aynı yerde takılmasın)
 "$PY" -c "import datasets, gguf, numpy, torch, transformers, safetensors" 2>/dev/null || {
   echo "Eksik Python paketi. Pilotu çalıştırdığın ortamda (ör. .venv) şunu çalıştır:"
