@@ -1,0 +1,17 @@
+# P2 pilot sonuçları
+
+## H1: Türkçe ve İngilizce hassasiyet sıralaması
+
+- Grup sayısı: 56 (katman × {dikkat, ileri besleme})
+- Q8_0 tabanı (KLD): TR 0.00384, EN 0.00389
+- Spearman ρ (TR vs EN): **0.874**
+- En hassas %20'lik grupların örtüşmesi: **91%** (10/11)
+- H1 eşiği (ρ < 0,8 veya örtüşme < %70): **sağlanmadı**
+
+Sıra farkı en büyük gruplar (pozitif = Türkçede daha hassas):
+
+| Katman | Grup | KLD TR | KLD EN | Sıra TR | Sıra EN | Fark |
+| --- | --- | --- | --- | --- | --- | --- |
+| 2 | attn | 0.01856 | 0.00458 | 23 | 48 | +25 |
+| 3 | attn | 0.02736 | 0.00675 | 17 | 36 | +19 |
+
