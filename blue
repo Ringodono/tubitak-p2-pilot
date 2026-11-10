@@ -1,0 +1,48 @@
+(.venv) erin@erimizu:~/tubitak-p2-pilot$ bluetoothctl
+[NEW] Media /org/bluez/hci0 
+	SupportedUUIDs: 0000110a-0000-1000-8000-00805f9b34fb
+	SupportedUUIDs: 0000110b-0000-1000-8000-00805f9b34fb
+Agent registered
+[CHG] Controller 3C:78:95:77:A7:28 Pairable: yes
+hci0 new_settings: powered bondable ssp br/edr le secure-conn wide-band-speech 
+hci0 class of device changed: 0x000000
+hci0 new_settings: bondable ssp br/edr le secure-conn wide-band-speech 
+[CHG] Controller 3C:78:95:77:A7:28 Class: 0x00000000 (0)
+[CHG] Controller 3C:78:95:77:A7:28 Powered: no
+[CHG] Controller 3C:78:95:77:A7:28 Discovering: no
+[CHG] Controller 3C:78:95:77:A7:28 PowerState: on
+[CHG] Controller 3C:78:95:77:A7:28 PowerState: off-blocked
+[CHG] Controller 3C:78:95:77:A7:28 PowerState: off-enabling
+hci0 class of device changed: 0x7c0104
+[CHG] Controller 3C:78:95:77:A7:28 Class: 0x007c0104 (8126724)
+hci0 new_settings: powered bondable ssp br/edr le secure-conn wide-band-speech 
+[CHG] Controller 3C:78:95:77:A7:28 PowerState: on
+[CHG] Controller 3C:78:95:77:A7:28 Powered: yes
+hci0 new_settings: powered connectable bondable ssp br/edr le secure-conn wide-band-speech 
+[CHG] Controller 3C:78:95:77:A7:28 Connectable: yes
+hci0 new_settings: powered connectable discoverable bondable ssp br/edr le secure-conn wide-band-speech 
+[CHG] Controller 3C:78:95:77:A7:28 Discoverable: yes
+[CHG] Controller 3C:78:95:77:A7:28 Discovering: yes
+[NEW] Device 44:D5:E5:11:C8:A5 44-D5-E5-11-C8-A5
+[NEW] Device 47:7A:C1:35:5E:6B 47-7A-C1-35-5E-6B
+[NEW] Device 5C:3E:C7:96:02:23 5C-3E-C7-96-02-23
+[NEW] Device 60:AC:2B:B5:F1:9B 60-AC-2B-B5-F1-9B
+[NEW] Device 78:27:07:01:CE:5F 78-27-07-01-CE-5F
+[CHG] Device 60:AC:2B:B5:F1:9B RSSI: 0xffffffc6 (-58)
+[CHG] Device 47:7A:C1:35:5E:6B RSSI: 0xffffffb4 (-76)
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Key: 0x004c (76)
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Value:
+  10 06 39 1e 5a 56 d5 7e                          ..9.ZV.~        
+[CHG] Device 78:27:07:01:CE:5F RSSI: 0xffffffa4 (-92)
+[CHG] Device 44:D5:E5:11:C8:A5 RSSI: 0xffffffb4 (-76)
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Key: 0x004c (76)
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Value:
+  01 00 00 00 00 00 00 00 00 00 00 00 00 80 00 00  ................
+  00                                               .               
+[CHG] Device 47:7A:C1:35:5E:6B RSSI: 0xffffffc2 (-62)
+[CHG] Device 78:27:07:01:CE:5F RSSI: 0xffffffb0 (-80)
+[NEW] Device 6C:5C:62:DE:4F:D4 6C-5C-62-DE-4F-D4
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Key: 0x004c (76)
+[CHG] Device 5C:3E:C7:96:02:23 ManufacturerData.Value:
+  01 00 00 00 00 00 00 00 00 00 00 00 00 80 00 00  ................
+  00                                               .       
