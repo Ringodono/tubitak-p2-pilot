@@ -18,9 +18,8 @@ sudo apt install python3-pip libvulkan1 mesa-vulkan-drivers vulkan-tools unzip c
 vulkaninfo --summary          # RX 7700 XT listede görünmeli
 
 mkdir -p ~/llama.cpp && cd ~/llama.cpp
-curl -sL $(curl -s https://api.github.com/repos/ggml-org/llama.cpp/releases/latest \
-  | grep -o 'https://[^"]*bin-ubuntu-vulkan-x64.zip' | head -1) -o llama.zip
-unzip -q llama.zip
+curl -L -o llama.tar.gz https://github.com/ggml-org/llama.cpp/releases/download/b12244/llama-b12244-bin-ubuntu-vulkan-x64.tar.gz
+tar xzf llama.tar.gz
 export BIN=$(dirname $(find ~/llama.cpp -name llama-quantize -type f | head -1))
 echo $BIN                     # bir klasör yolu yazmalı
 
