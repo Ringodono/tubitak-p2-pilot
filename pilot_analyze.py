@@ -142,7 +142,10 @@ def report():
         lines.append("")
 
     (RES / "pilot_results.md").write_text("\n".join(lines))
-    print("\n".join(lines[:16]))
+    # Ekrana H1 özeti ve dağıtım/kalibrasyon tabloları; tüm gruplar tablosu yalnız dosyada.
+    cut = lines.index("Tüm gruplar:") if "Tüm gruplar:" in lines else len(lines)
+    tail = next((i for i, l in enumerate(lines) if l.startswith("## H2")), len(lines))
+    print("\n".join(lines[:min(9, cut)] + [""] + lines[tail:]))
     print(f"\nTam rapor: {RES / 'pilot_results.md'}")
 
 
