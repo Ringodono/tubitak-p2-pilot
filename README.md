@@ -29,7 +29,7 @@ pip install datasets gguf huggingface_hub
 Kaynaktan derlemek istersen Ubuntu 24.04 veya üstü gerekir, çünkü eski sürümlerde `glslc` paketi yok:
 
 ```bash
-sudo apt install build-essential cmake git libvulkan-dev glslc
+sudo apt install build-essential cmake git libvulkan-dev glslc spirv-headers
 git clone https://github.com/ggml-org/llama.cpp ~/llama.cpp-src && cd ~/llama.cpp-src
 cmake -B build -DGGML_VULKAN=ON && cmake --build build --config Release -j
 export BIN=~/llama.cpp-src/build/bin
