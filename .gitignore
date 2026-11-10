@@ -1,0 +1,7 @@
+models/
+work/
+calib/
+*.gguf
+*.kld
+*.dat
+__pycache__/
