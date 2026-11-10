@@ -8,11 +8,12 @@ Alt komutlar:
   report                     results/*.csv dosyalarından results/pilot_results.md üretir
 """
 import csv
+import os
 import re
 import sys
 from pathlib import Path
 
-RES = Path("results")
+RES = Path(os.environ.get("RES", "results"))
 
 
 def parse(log):

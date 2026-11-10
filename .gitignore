@@ -5,3 +5,5 @@ calib/
 *.kld
 *.dat
 __pycache__/
+logs/
+results/

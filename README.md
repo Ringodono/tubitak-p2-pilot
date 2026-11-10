@@ -1,5 +1,42 @@
 # P2 pilotu: Türkçe ve İngilizce kuantizasyon hassasiyeti
 
+## Pilot 2 (tek komut, 5–7 saat)
+
+Pilot 2, Türkçenin neden daha kırılgan olduğunu (mekanizma) ve bundan türeyen yöntemleri sınar. Üç modelde çalışır: Qwen2.5-1.5B, EuroLLM-1.7B ve Qwen2.5-3B. Fince kontrol dili olarak eklenir. Yaklaşık 35 GB boş disk gerekir.
+
+Kurulum: aşağıdaki "1. Kurulum" adımlarına ek olarak PyTorch (işlemci sürümü yeterli) ve transformers:
+
+```bash
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+pip install transformers safetensors numpy
+```
+
+Çalıştırma (modelleri ve metinleri kendisi indirir):
+
+```bash
+git pull
+BIN=$BIN ./run_all.sh
+```
+
+Bir bölüm hata verirse `logs/` altına yazar ve sıradakine geçer. Aynı komut tekrar çalıştırılınca kaldığı yerden devam eder. Bitince `results/pilot2_report.md` oluşur; `results/` klasörünü (özellikle `pilot2_report.md` ve alt klasörlerdeki `.csv` dosyaları) yüklemen yeterli.
+
+| Ne ölçülüyor | Aşama | Çıktı (`results/<model>/`) |
+| --- | --- | --- |
+| Olgu: TR/EN/FI hassasiyeti, katman profili | `profile`, `calib` | `profile.csv`, `calib.csv` |
+| M1: Türkçeye özgü nöronlar (LAPE) | `neurons` | `neurons.npz`, `neurons_layers.csv` |
+| M1/M2: hatanın nöronlara dağılımı, imatrix önemi | `qerror` | `qerror.csv`, `imatrix_compare.csv` |
+| M1 nedensel: yalnız TR nöronlarını onarma (rastgele kontrollü), M3 token türü | `repair` | `repair.csv`, `repair_tokens.npz` |
+| Y1: Türkçe nöron ağırlıklı imatrix | `boost` | `boost.csv` |
+| Y2: Fisher kestirimi | `fisher` | `fisher.csv` |
+| Y3: kalibrasyonda Türkçe payı %0–100 | `share` | `share.csv` |
+| H2: dile göre bit dağıtımı | `alloc` | `alloc.csv` |
+
+Python analizleri ağırlıkları F16 GGUF dosyasından okur; Hugging Face'ten yalnız yapılandırma ve tokenizer indirilir. Bunun nedeni, yayımlanan GGUF ile Hugging Face ağırlıklarının farklı sürümlerden olabilmesi; böylece llama.cpp ölçümleri ve Python analizleri birebir aynı modele bakar. `fisher` aşaması henüz hiç çalıştırılmadı; hata verirse günlüğünü gönder.
+
+---
+
+Aşağısı Pilot 1'in (ilk denemenin) talimatları.
+
 Bu pilot, Qwen2.5-1.5B-Instruct'ta her katmanın dikkat (attn) ve ileri besleme (ffn) gruplarını tek tek Q2_K'ya düşürür. Geri kalan tensörler Q8_0'da kalır. Her model için F16 modele göre KL sapması Türkçe ve İngilizce metinde ölçülür. Ardından üç şey yapılır:
 
 - Türkçe ve İngilizce hassasiyet sıralaması karşılaştırılır (H1).
