@@ -1,0 +1,12 @@
+CMake Error at ggml/src/ggml-vulkan/CMakeLists.txt:14 (find_package):
+  Could not find a package configuration file provided by "SPIRV-Headers"
+  with any of the following names:
+
+    SPIRV-HeadersConfig.cmake
+    spirv-headers-config.cmake
+
+  Add the installation prefix of "SPIRV-Headers" to CMAKE_PREFIX_PATH or set
+  "SPIRV-Headers_DIR" to a directory containing one of the above files.  If
+  "SPIRV-Headers" provides a separate development package or SDK, be sure it
+  has been installed.
+
