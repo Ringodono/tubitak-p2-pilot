@@ -1,3 +1,70 @@
+# GEÇİCİ: Linux'ta Bluetooth klavye çalışmıyor
+
+**Klavye yokken yazmak için:** Ayarlar → Erişilebilirlik (Accessibility) → Yazma (Typing) → **Ekran Klavyesi (Screen Keyboard)** aç. Terminali açmak için sol alttaki uygulama menüsünden "Terminal" ara (ekran klavyesiyle). Komutları buradan kopyala-yapıştır da yapabilirsin: sayfayı Linux'taki tarayıcıda aç, komutu seç, terminale sağ tık → Yapıştır.
+
+**1. Bluetooth açık mı, engelli mi:**
+
+```bash
+rfkill list
+sudo rfkill unblock bluetooth
+sudo systemctl enable --now bluetooth
+sudo systemctl restart bluetooth
+systemctl status bluetooth --no-pager
+```
+
+`rfkill list` çıktısında Bluetooth için "Soft blocked: yes" ya da "Hard blocked: yes" yazıyorsa engelliydi; ikinci komut yumuşak engeli kaldırır. Hiç Bluetooth satırı yoksa adaptör görünmüyordur, 4. adıma bak.
+
+**2. Klavyeyi yeniden eşleştir (dual boot'ta en sık neden budur):** Windows ve Linux aynı Bluetooth adaptörünü kullanıyor ama eşleştirme anahtarlarını ayrı tutuyor. Klavye en son Windows'ta eşleştiyse Linux'taki eski anahtar geçersizdir. Klavyeyi **eşleştirme moduna** al (genelde Bluetooth tuşuna/kanal tuşuna 3–5 sn bas, ışık hızlı yanıp söner), sonra:
+
+```bash
+bluetoothctl
+```
+
+Açılan `[bluetooth]#` satırında sırayla:
+
+```
+power on
+agent on
+default-agent
+scan on
+```
+
+Listede klavyenin adı ve adresi (`XX:XX:XX:XX:XX:XX`) görününce:
+
+```
+scan off
+remove XX:XX:XX:XX:XX:XX
+pair XX:XX:XX:XX:XX:XX
+trust XX:XX:XX:XX:XX:XX
+connect XX:XX:XX:XX:XX:XX
+quit
+```
+
+`pair` sırasında ekranda 6 haneli bir kod çıkarsa onu **fiziksel klavyede** yazıp Enter'a bas. Bundan sonra Windows'ta klavyeyi bir kez daha eşleştirmen gerekebilir (iki sistem aynı anda tutamıyor; ikisinde de kalıcı çalışması için anahtar kopyalama yapılabilir, sonra bakarız).
+
+**3. Hâlâ bağlanmıyorsa günlük:**
+
+```bash
+journalctl -b -u bluetooth --no-pager | tail -30
+sudo dmesg | grep -i -E "bluetooth|btusb|hci" | tail -30
+```
+
+Çıktının fotoğrafını ya da metnini gönder.
+
+**4. Adaptör hiç görünmüyorsa** (kart üstü Wi-Fi/Bluetooth modülü, ör. MediaTek/Intel/Realtek):
+
+```bash
+lsusb
+sudo apt update && sudo apt install --reinstall linux-firmware bluez
+sudo modprobe -r btusb && sudo modprobe btusb
+```
+
+Sonra yeniden başlat. Windows'ta "Hızlı Başlatma" (Fast Startup) açıksa Bluetooth/Wi-Fi kartı Linux'ta kilitli kalabilir: Windows'ta Denetim Masası → Güç Seçenekleri → "Güç düğmelerinin yapacaklarını seçin" → "Hızlı başlatmayı aç" işaretini kaldır, Windows'u **Yeniden Başlat** ile kapatıp Linux'a gir.
+
+**En kısa yol:** Elinde kablolu (USB) bir klavye varsa onu takıp yukarıdaki komutları onunla yazmak.
+
+---
+
 # P2 pilotu: Türkçe ve İngilizce kuantizasyon hassasiyeti
 
 ## Pilot 3 (tek komut, 3–4 saat)
