@@ -71,10 +71,14 @@ def profile():
 
 
 def select(lang, k):
+    """lang: tr / en (o dilde en hassas gruplar) ya da tr_excess
+    (Türkçe kaybın İngilizceyi en çok aştığı gruplar)."""
     prof, floor = profile()
     by_group = {}
     for (layer, group), v in prof.items():
-        by_group.setdefault(group, []).append((v[lang] - floor.get(lang, 0.0), layer))
+        tr, en = v["tr"] - floor.get("tr", 0.0), v["en"] - floor.get("en", 0.0)
+        score = tr - en if lang == "tr_excess" else {"tr": tr, "en": en}[lang]
+        by_group.setdefault(group, []).append((score, layer))
     for group, items in sorted(by_group.items()):
         for _, layer in sorted(items, reverse=True)[:k]:
             print(f"blk\\.{layer}\\.{group}_.*")
@@ -120,7 +124,7 @@ def report():
         lines.append("")
 
     for name, title, note in (
-        ("alloc.csv", "H2 ön denemesi: dile göre bit dağıtımı", "Taban Q3_K_S; seçilen gruplar Q5_K. TR ve EN kolları aynı sayıda dikkat ve ileri besleme grubu yükseltir, boyutları eşittir."),
+        ("alloc.csv", "H2 ön denemesi: dile göre bit dağıtımı", "Taban Q3_K_S; seçilen gruplar Q5_K. Her kol aynı sayıda dikkat ve ileri besleme grubu yükseltir, boyutlar eşittir. Seçim: en/tr = o dilde en hassas gruplar; tr_excess = Türkçe kaybın İngilizceyi en çok aştığı gruplar. +imatrix_X kolları ayrıca X dilinde imatrix kullanır."),
         ("calib.csv", "Kalibrasyon dili ön denemesi", "Q3_K_S; imatrix metni değişiyor."),
     ):
         rows = load(name)

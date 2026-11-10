@@ -114,10 +114,17 @@ stage_alloc() {
   local out="$RES/alloc.csv"
   [ -f "$out" ] || echo "model,size_mb,lang,kld,kld_err,top1" >"$out"
   build_eval q3_k_s "$out"
-  for lang in en tr; do
-    local args=()
-    while read -r pat; do args+=(--tensor-type "$pat=q5_K"); done < <(python3 pilot_analyze.py select "$lang" "$K")
-    build_eval "q3_k_s+${lang}_aware" "$out" "${args[@]}"
+  # sel: seçim ölçütü, im: imatrix dili (boş = imatrix yok)
+  for arm in en: tr: tr_excess: en:en tr:tr tr_excess:tr; do
+    local sel="${arm%%:*}" im="${arm#*:}" args=() name
+    while read -r pat; do args+=(--tensor-type "$pat=q5_K"); done < <(python3 pilot_analyze.py select "$sel" "$K")
+    name="q3_k_s+${sel}_aware"
+    if [ -n "$im" ]; then
+      [ -f "$WORK/imatrix-$im.dat" ] || { echo "Önce calib aşaması: $WORK/imatrix-$im.dat yok" >&2; exit 1; }
+      args+=(--imatrix "$WORK/imatrix-$im.dat")
+      name="$name+imatrix_$im"
+    fi
+    build_eval "$name" "$out" "${args[@]}"
   done
 }
 
