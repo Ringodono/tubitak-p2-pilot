@@ -1,0 +1,9 @@
+model,size_mb,lang,kld,kld_err,top1
+q3_k_s+imatrix_none,821,tr,0.524414,0.009971,65.882
+q3_k_s+imatrix_none,821,en,0.192507,0.004892,78.510
+q3_k_s+imatrix_en,821,tr,0.449416,0.008784,67.235
+q3_k_s+imatrix_en,821,en,0.150868,0.003918,80.922
+q3_k_s+imatrix_tr,821,tr,0.403851,0.008286,68.549
+q3_k_s+imatrix_tr,821,en,0.153940,0.003834,80.412
+q3_k_s+imatrix_mix,821,tr,0.412000,0.008213,69.235
+q3_k_s+imatrix_mix,821,en,0.151483,0.003834,80.941
