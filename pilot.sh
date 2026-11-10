@@ -42,7 +42,7 @@ kld() {
 
 stage_check() {
   for f in "$MODEL" calib/eval_tr.txt calib/eval_en.txt calib/tr.txt calib/en.txt calib/mix.txt; do
-    [ -f "$f" ] || { echo "Eksik: $f (README_PILOT.md adım 2–3)" >&2; exit 1; }
+    [ -f "$f" ] || { echo "Eksik: $f (README.md adım 2–3)" >&2; exit 1; }
   done
   for c in "$QUANT" "$PPL" "$IMAT"; do
     command -v "$c" >/dev/null || { echo "Bulunamadı: $c (BIN değişkenini ayarla)" >&2; exit 1; }
