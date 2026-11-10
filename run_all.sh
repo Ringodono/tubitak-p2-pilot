@@ -36,12 +36,22 @@ download() {
   # Python analizleri için yalnız yapılandırma ve tokenizer (ağırlıklar GGUF'tan okunur)
   for m in 1.5B 3B; do
     [ -f "models/cfg-qwen2.5-${m,,}/config.json" ] || hf download "Qwen/Qwen2.5-$m-Instruct" \
-      --include "*.json" "merges.txt" "vocab.json" --local-dir "models/cfg-qwen2.5-${m,,}"
+      config.json generation_config.json tokenizer.json tokenizer_config.json vocab.json merges.txt \
+      --local-dir "models/cfg-qwen2.5-${m,,}"
   done
+}
+
+# Gerekli Python paketleri: eksikse hemen dur (her model aynı yerde takılmasın)
+"$PY" -c "import datasets, gguf, numpy, torch, transformers, safetensors" 2>/dev/null || {
+  echo "Eksik Python paketi. Pilotu çalıştırdığın ortamda (ör. .venv) şunu çalıştır:"
+  echo "  pip install datasets gguf numpy transformers safetensors huggingface_hub"
+  echo "  pip install torch --index-url https://download.pytorch.org/whl/cpu"
+  exit 1
 }
 
 run indirme download
 run metinler "$PY" make_calib.py
+[ -f calib/eval_fi.txt ] && [ -f calib/tr050.txt ] || { echo "Metinler hazırlanamadı, günlük: logs/metinler.log"; exit 1; }
 
 run qwen2.5-1.5b env TAG=qwen2.5-1.5b MODEL=models/qwen2.5-1.5b-instruct-fp16.gguf HF=models/cfg-qwen2.5-1.5b \
   ./pilot.sh check base profile calib share alloc keep neurons qerror repair fisher boost
