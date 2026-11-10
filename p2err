@@ -1,46 +1,74 @@
-logs/:
-eurollm-1.7b.log  indirme.log  metinler.log  qwen2.5-1.5b.log  qwen2.5-3b.log  rapor.log
-
-results/:
-alloc.csv  calib.csv  eurollm-1.7b  pilot2_report.md  pilot_results.md  profile.csv  qwen2.5-1.5b  qwen2.5-3b
-
-
-==> logs/eurollm-1.7b.log <==
-######## check (19:25)
-Eksik: calib/eval_fi.txt (python3 make_calib.py)
-
-==> logs/indirme.log <==
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-✓ Downloaded
-  path: /home/erin/tubitak-p2-pilot/models/qwen2.5-3b-instruct-fp16-00002-of-00002.gguf
-/home/erin/tubitak-p2-pilot/.venv/lib/python3.14/site-packages/huggingface_hub/cli/download.py:158: UserWarning: Ignoring `--include` since filenames have been explicitly set.
-  warnings.warn("Ignoring `--include` since filenames have been explicitly set.")
-Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00,  8.71it/s]
+######## indirme başladı (10.11 19:42)
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 27.58it/s]
 ✓ Downloaded
   path: /home/erin/tubitak-p2-pilot/models/cfg-qwen2.5-1.5b
-/home/erin/tubitak-p2-pilot/.venv/lib/python3.14/site-packages/huggingface_hub/cli/download.py:158: UserWarning: Ignoring `--include` since filenames have been explicitly set.
-  warnings.warn("Ignoring `--include` since filenames have been explicitly set.")
-Fetching 2 files:  50%|█████     | 1/2 [00:00<00:00,  5.48it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 2 files: 100%|██████████| 2/2 [00:00<00:00,  8.79it/s]
+Fetching 6 files:   0%|          | 0/6 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 6 files: 100%|██████████| 6/6 [00:00<00:00, 28.30it/s]
 ✓ Downloaded
   path: /home/erin/tubitak-p2-pilot/models/cfg-qwen2.5-3b
+######## indirme bitti (19:42)
+######## metinler başladı (10.11 19:42)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+== fi
+== de
+== ru
+de.txt            407899 bayt
+en.txt            405055 bayt
+eval_de.txt        83169 bayt
+eval_en.txt        84237 bayt
+eval_fi.txt        83315 bayt
+eval_ru.txt       143213 bayt
+eval_tr.txt        87161 bayt
+fi.txt            417610 bayt
+mix.txt           389297 bayt
+ru.txt            716021 bayt
+tr.txt            435296 bayt
+tr000.txt         402988 bayt
+tr025.txt         410485 bayt
+tr050.txt         419098 bayt
+tr075.txt         427396 bayt
+tr100.txt         435296 bayt
+######## metinler bitti (19:43)
+######## qwen2.5-1.5b başladı (10.11 19:43)
+######## check (19:43)
+Bulunamadı: llama-quantize (BIN değişkenini ayarla)
+######## qwen2.5-1.5b HATA verdi, günlük: logs/qwen2.5-1.5b.log
+######## eurollm-1.7b başladı (10.11 19:43)
+######## check (19:43)
+Bulunamadı: llama-quantize (BIN değişkenini ayarla)
+######## eurollm-1.7b HATA verdi, günlük: logs/eurollm-1.7b.log
+######## qwen2.5-3b başladı (10.11 19:43)
+######## check (19:43)
+Bulunamadı: llama-quantize (BIN değişkenini ayarla)
+######## qwen2.5-3b HATA verdi, günlük: logs/qwen2.5-3b.log
+######## rapor başladı (10.11 19:43)
+# P2 pilot 2 raporu
 
-==> logs/metinler.log <==
-Traceback (most recent call last):
-  File "/home/erin/tubitak-p2-pilot/make_calib.py", line 19, in <module>
-    from datasets import load_dataset
-ModuleNotFoundError: No module named 'datasets'
+Modeller: v1 (results/)
 
-==> logs/qwen2.5-1.5b.log <==
-######## check (19:25)
-Eksik: calib/eval_fi.txt (python3 make_calib.py)
+## 1. Olgu: Türkçe kırılganlığı ve katman profili
 
-==> logs/qwen2.5-3b.log <==
-######## check (19:25)
-Eksik: calib/eval_fi.txt (python3 make_calib.py)
+| Model | TR/EN KLD (Q3_K_S, imatrix yok) | FI/EN | Profil ρ (TR–EN) | TR/EN ilk %20 katman | orta | son %20 |
+| --- | --- | --- | --- | --- | --- | --- |
+| v1 (results/) | 2.72 | - | 0.874 | 3.67 | 1.90 | 2.72 |
 
-==> logs/rapor.log <==
+## 2. Mekanizma (M1–M3)
+
+## 3. Yöntem ön denemeleri (Y1–Y3)
+
+### v1 (results/): Kalibrasyon dili
+
+Q3_K_S.
+
+| Model | MB | KLD tr | KLD en | TR değişim (ref.) |
+| --- | --- | --- | --- | --- |
+| q3_k_s+imatrix_none | 821 | 0.5244 | 0.1925 | +16.7% |
+| q3_k_s+imatrix_en | 821 | 0.4494 | 0.1509 | +0.0% |
+| q3_k_s+imatrix_tr | 821 | 0.4039 | 0.1539 | -10.1% |
+| q3_k_s+imatrix_mix | 821 | 0.4120 | 0.1515 | -8.3% |
+
+### v1 (results/): Dile göre bit dağıtımı (eşit boyut)
 
 Taban Q3_K_S, seçilen 8 grup Q5_K.
 
@@ -56,3 +84,6 @@ Taban Q3_K_S, seçilen 8 grup Q5_K.
 
 
 Tam rapor: results/pilot2_report.md
+######## rapor bitti (19:43)
+
+Hata veren bölümler: qwen2.5-1.5b eurollm-1.7b qwen2.5-3b (logs/ altındaki günlüklere bak; tekrar çalıştırınca kaldığı yerden devam eder)
