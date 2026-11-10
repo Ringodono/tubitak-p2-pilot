@@ -13,6 +13,7 @@ Süre RX 7700 XT'de yaklaşık 1–2 saat. Diskte yaklaşık 10 GB boş yer gere
 En kolay yol llama.cpp'nin hazır Vulkan ikililerini kullanmak; derleme gerekmez:
 
 ```bash
+sudo apt update
 sudo apt install python3-pip libvulkan1 mesa-vulkan-drivers vulkan-tools unzip curl
 vulkaninfo --summary          # RX 7700 XT listede görünmeli
 
