@@ -67,6 +67,19 @@ Sonra yeniden başlat. Windows'ta "Hızlı Başlatma" (Fast Startup) açıksa Bl
 
 # P2 pilotu: Türkçe ve İngilizce kuantizasyon hassasiyeti
 
+## Pilot 4 (tek komut): KL kazancı görev doğruluğuna yansıyor mu?
+
+Pilot 1–3 yalnız KL sapması ölçtü. Pilot 4 aynı kolları TurkishMMLU'da (herkese açık 900 test sorusundan ders başına 50, sıfır atış) sınar. Qwen2.5-1.5B üzerinde 9 kol çalışır: F16; Q3_K_S'de EN ve TR imatrix ile ayırma yok, standart seçim ve Türkçe ağırlıklı seçim; Q4_K_M'de EN ve TR imatrix. Doğruluğun yanında doğru harfin olasılığı ve F16 ile aynı cevap oranı da raporlanır, çünkü bunlar küçük farklara daha duyarlı.
+
+Pilot 3 bittikten sonra, aynı ortamda (`.venv`):
+
+```bash
+git pull
+./run_pilot4.sh
+```
+
+Her kolun bitiminde kalan süre tahmini yazılır. Uzun sürerse durdurup `N=180 ./run_pilot4.sh` ile daha az soruyla çalıştırabilirsin; tamamlanan kollar korunur ama soru sayısı değişince baştan başlar. Sonuç `results/pilot4_report.md`; onu yüklemen yeterli. Hata olursa `logs/p4-mmlu.log` dosyasını gönder.
+
 ## Pilot 3 (tek komut, 3–4 saat)
 
 Pilot 2'de en güçlü yöntem adayı çıktı: Türkçe nöronları (FFN'nin %0,4'ü) asıl hassasiyetinde tutmak Türkçe KLD'yi %10 düşürüyor. Pilot 3 bunu gerçek bir yönteme çevirir. Tüm model kuantize edilir, seçilen nöronlar ayrı bir F16 (ya da Q8_0) tabloda tutulur ve ek boyut hesaplanır. Karşılaştırılan rakipler:

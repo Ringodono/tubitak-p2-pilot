@@ -7,3 +7,4 @@ calib/
 __pycache__/
 logs/
 results/
+data/
